@@ -6,10 +6,59 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Faker CSV</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<h1>Faker CSV</h1>
+<div class="container">
+  <div class="heading">
+    <div class="column-definition">
+      <div class="form-element">
+        <label for="name">Column name</label>
+        <input id="name" type="text">
+      </div>
+      <div class="form-element">
+        <label for="type">Column type</label>
+        <select id="type"></select>
+      </div>
+      <div class="value-param" hidden>
+        <div class="form-element">
+          <label for="value_param"></label>
+          <input type="text" id="value_param" value="">
+        </div>
+      </div>
+      <label class="checkbox-container">unique
+        <input type="checkbox" id="unique">
+        <span class="checkbox-custom"></span>
+      </label>
+      <button type="button" id="add_column">Add</button>
+    </div>
+    <div class="generator-settings">
+      <div class="form-element">
+        <label for="items_count">items count:</label>
+        <input type="number" id="items_count" value="10">
+      </div>
+      <div class="form-element">
+        <label for="separator">separator:</label>
+        <input type="text" id="separator" value=";">
+      </div>
 
-<script src="script.js"></script>
+      <label class="checkbox-container">include headers
+        <input type="checkbox" checked="checked" id="include_headers">
+        <span class="checkbox-custom"></span>
+      </label>
+
+      <button type="button" id="generate">Generate</button>
+    </div>
+  </div>
+
+  <div class="columns"></div>
+
+  <div class="result-csv" hidden>
+    <label for="result">Result</label>
+    <textarea id="result"></textarea>
+  </div>
+</div>
+<script type="module" src="script.js"></script>
 </body>
 </html>
