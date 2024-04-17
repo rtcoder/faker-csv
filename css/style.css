@@ -108,7 +108,11 @@ h1:after {
     font-size: 20px;
     line-height: 15px;
 }
-.result-csv textarea{
+
+.result-csv textarea {
+    padding: 5px;
     width: 100%;
     resize: vertical;
+    min-height: 400px;
+    line-height: 1.25;
 }

@@ -77,7 +77,7 @@ function generate() {
     const csvString = generateCsvString(elements);
     console.log(csvString);
     const textarea = getResultTextarea();
-    textarea.innerText = csvString;
+    textarea.value = csvString;
     show(textarea.parentNode);
 }
 
