@@ -1,0 +1,106 @@
+[
+  {
+    "value": "",
+    "title": "Select"
+  },
+  {
+    "canBeUnique": true,
+    "value": "firstName",
+    "title": "First name"
+  },
+  {
+    "canBeUnique": true,
+    "value": "middleName",
+    "title": "Middle name"
+  },
+  {
+    "canBeUnique": true,
+    "value": "lastName",
+    "title": "Last name"
+  },
+  {
+    "canBeUnique": true,
+    "value": "fullName",
+    "title": "Full name"
+  },
+  {
+    "canBeUnique": true,
+    "value": "phoneNumber",
+    "title": "Phone number"
+  },
+  {
+    "canBeUnique": true,
+    "value": "companyName",
+    "title": "Company name"
+  },
+  {
+    "canBeUnique": true,
+    "value": "price",
+    "title": "Price"
+  },
+  {
+    "canBeUnique": true,
+    "value": "currencyCode",
+    "title": "Currency code"
+  },
+  {
+    "canBeUnique": true,
+    "value": "color",
+    "title": "Color"
+  },
+  {
+    "canBeUnique": true,
+    "value": "password",
+    "title": "Password"
+  },
+  {
+    "canBeUnique": true,
+    "value": "email",
+    "title": "Email"
+  },
+  {
+    "canBeUnique": false,
+    "value": "elementFromList",
+    "title": "Element from list",
+    "varName": "Values (separated by comma)"
+  },
+  {
+    "canBeUnique": true,
+    "value": "paragraph",
+    "title": "Paragraph",
+    "varName": "Sentences",
+    "varValue": 3
+  },
+  {
+    "canBeUnique": true,
+    "value": "words",
+    "title": "Words",
+    "varName": "Count",
+    "varValue": 1
+  },
+  {
+    "canBeUnique": true,
+    "value": "city",
+    "title": "City"
+  },
+  {
+    "canBeUnique": true,
+    "value": "country",
+    "title": "Country"
+  },
+  {
+    "canBeUnique": true,
+    "value": "countryCode",
+    "title": "Country code"
+  },
+  {
+    "canBeUnique": true,
+    "value": "street",
+    "title": "Street"
+  },
+  {
+    "canBeUnique": true,
+    "value": "state",
+    "title": "State"
+  }
+]

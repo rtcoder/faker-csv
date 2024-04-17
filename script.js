@@ -1,53 +1,114 @@
-const columns = [];
-const nameInput = document.querySelector('input#name');
-const typeSelect = document.querySelector('select#type');
-const uniqueCheckbox = document.querySelector('input#unique');
-const additionalValueParam = document.querySelector('.value-param');
-const columnsDiv = document.querySelector('.columns');
-const columnsDefinitions = [
-    {value: '', title: 'Select'},
-    {value: 'firstName', title: 'First name'},
-    {value: 'middleName', title: 'Middle name'},
-    {value: 'lastName', title: 'Last name'},
-    {value: 'fullName', title: 'Full name'},
-    {value: 'phoneNumber', title: 'Phone number'},
-    {value: 'companyName', title: 'Company name'},
-    {value: 'price', title: 'Price'},
-    {value: 'currencyCode', title: 'Currency code'},
-    {value: 'color', title: 'Color'},
-    {value: 'password', title: 'Password'},
-    {value: 'email', title: 'Email'},
-    {value: 'elementFromList', title: 'Element from list', varName: 'Values (separated by comma)'},
-    {value: 'paragraph', title: 'Paragraph', varName: 'Sentences', varValue: 3},
-    {value: 'words', title: 'Words', varName: 'Count', varValue: 1},
-    {value: 'city', title: 'City'},
-    {value: 'country', title: 'Country'},
-    {value: 'countryCode', title: 'Country code'},
-    {value: 'street', title: 'Street'},
-    {value: 'state', title: 'State'},
-];
+import {
+    generateLocaleSelectOptions,
+    generateSelectOptions,
+    getAdditionalValueParam,
+    getAdditionalValueParamInput,
+    getAdditionalValueParamLabel,
+    getIncludeHeadersCheckbox,
+    getItemsCountInput,
+    getLocaleSelect,
+    getNameInput,
+    getResultTextarea,
+    getSeparatorInput,
+    getTypeSelect,
+    getUniqueCheckbox,
+    hide,
+    show,
+    updateColumns,
+} from './css/js/dom-helpers.js';
+import {generateItems, setFakerLocale} from './css/js/faker-generator.js';
 
-generateSelectOptions();
+const columnsDefinitions = await fetch('./json/columns-definitions.json').then(res => res.json());
+const langs = await fetch('./json/langs.json').then(res => res.json());
+const columnsFromLs = localStorage.getItem('columns');
+const columns = columnsFromLs ? JSON.parse(columnsFromLs) : [];
+if (columns.length) {
+    updateColumns(columns, columnsDefinitions);
+}
+const typeSelect = getTypeSelect();
+const localeSelect = getLocaleSelect();
+const uniqueCheckbox = getUniqueCheckbox();
+
+
+generateSelectOptions(columnsDefinitions);
+generateLocaleSelectOptions(langs);
+
+localeSelect.addEventListener('change', e => {
+    setFakerLocale(e.target.value);
+});
+
 typeSelect.addEventListener('change', e => {
-    console.log(e);
+    const additionalValueParam = getAdditionalValueParam();
     const option = e.target.querySelector(`[value="${e.target.value}"]`);
-    console.log(option);
+
     if (option.dataset.varName) {
-        additionalValueParam.querySelector('label').innerText = option.dataset.varName;
-        additionalValueParam.querySelector('#value_param').value = option.dataset.varValue || '';
-        additionalValueParam.removeAttribute('hidden');
+        getAdditionalValueParamLabel().innerText = option.dataset.varName;
+        getAdditionalValueParamInput().value = option.dataset.varValue || '';
+        show(additionalValueParam);
     } else {
-        additionalValueParam.setAttribute('hidden', '');
+        hide(additionalValueParam);
     }
 });
 
-document.querySelector('#add_column').addEventListener('click', () => {
-    let errors = false;
+document.body.addEventListener('click', (e) => {
+    if (e.target.matches('#add_column')) {
+        addColumn();
+        return;
+    }
+    if (e.target.matches('#generate')) {
+        generate();
+        return;
+    }
+    if (e.target.matches('.column-item .close')) {
+        const columnItem = e.target.closest('.column-item');
+        const columnName = columnItem.querySelector('.column-name').innerText;
+        const columnIndex = columns.findIndex(col => col.name === columnName);
+        columns.splice(columnIndex, 1);
+        localStorage.setItem('columns', JSON.stringify(columns));
+        updateColumns(columns, columnsDefinitions);
+    }
+});
 
-    [typeSelect, nameInput].forEach(node => {
+function generate() {
+
+    const itemsCount = +getItemsCountInput().value;
+    const elements = generateItems(itemsCount, columns);
+
+    const csvString = generateCsvString(elements);
+    console.log(csvString);
+    const textarea = getResultTextarea();
+    textarea.innerText = csvString;
+    show(textarea.parentNode);
+}
+
+function generateCsvString(arrOfObject) {
+    const includeHeaders = getIncludeHeadersCheckbox().checked;
+    const separator = getSeparatorInput().value;
+    const csvColumns = Object.keys(arrOfObject[0]);
+    const csvRows = arrOfObject.map(obj => csvColumns.map(column => {
+        const val = obj[column];
+        if (val.includes(separator)) {
+            return `"${val}"`;
+        }
+        return val;
+    }));
+    const csvArray = [
+        ...(includeHeaders ? [csvColumns] : []),
+        ...csvRows,
+    ];
+    const csvString = csvArray.map(row => row.join(separator)).join('\n');
+    return csvString;
+}
+
+function addColumn() {
+    let errors = false;
+    const nameInput = getNameInput();
+    const additionalValueParamInput = getAdditionalValueParamInput();
+
+    [typeSelect, nameInput, additionalValueParamInput].forEach(node => {
         node.classList.remove('error');
 
-        if (!node.value.length) {
+        if (!node.value.length && !node.closest('.form-element').hasAttribute('hidden')) {
             node.classList.add('error');
             errors = true;
         }
@@ -60,30 +121,10 @@ document.querySelector('#add_column').addEventListener('click', () => {
     const column = {
         name: nameInput.value,
         type: typeSelect.value,
-        additionalValue: additionalValueParam.querySelector('#value_param').value,
+        additionalValue: getAdditionalValueParamInput().value,
         unique: uniqueCheckbox.checked,
     };
     columns.push(column);
-
-    updateColumns();
-});
-
-function updateColumns() {
-    columnsDiv.innerHTML = columns.map(column => {
-        return `<div class="column-item">
-                  <div class="column-name">${column.name}</div>
-                  <div class="column-type">${column.type}</div>
-                  <div class="column-additional-value">${column.additionalValue}</div>
-                  <div class="column-additional-value">${column.unique?'unique':''}</div>
-                  <div class="close">&times;</div>
-                </div>`;
-    }).join('');
-}
-
-function generateSelectOptions() {
-    typeSelect.innerHTML = columnsDefinitions.map(c => {
-        const varName = c.varName ? `data-var-name="${c.varName}"` : '';
-        const varValue = c.varValue ? `data-var-value="${c.varValue}"` : '';
-        return `<option value="${c.value}" ${varName} ${varValue}>${c.title}</option>`;
-    }).join('');
+    localStorage.setItem('columns', JSON.stringify(columns));
+    updateColumns(columns, columnsDefinitions);
 }

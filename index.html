@@ -21,11 +21,9 @@
         <label for="type">Column type</label>
         <select id="type"></select>
       </div>
-      <div class="value-param" hidden>
-        <div class="form-element">
-          <label for="value_param"></label>
-          <input type="text" id="value_param" value="">
-        </div>
+      <div class="form-element value-param" hidden>
+        <label for="value_param"></label>
+        <input type="text" id="value_param" value="">
       </div>
       <label class="checkbox-container">unique
         <input type="checkbox" id="unique">
@@ -34,6 +32,10 @@
       <button type="button" id="add_column">Add</button>
     </div>
     <div class="generator-settings">
+      <div class="form-element">
+        <label for="locale">Locale</label>
+        <select id="locale"></select>
+      </div>
       <div class="form-element">
         <label for="items_count">items count:</label>
         <input type="number" id="items_count" value="10">
