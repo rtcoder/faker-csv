@@ -15,8 +15,8 @@ import {
     hide,
     show,
     updateColumns,
-} from './css/js/dom-helpers.js';
-import {generateItems, setFakerLocale} from './css/js/faker-generator.js';
+} from './dom-helpers.js';
+import {generateItems, setFakerLocale} from './faker-generator.js';
 
 const columnsDefinitions = await fetch('./json/columns-definitions.json').then(res => res.json());
 const langs = await fetch('./json/langs.json').then(res => res.json());
