@@ -126,7 +126,7 @@ export function generateItems(itemsCount, columns) {
         for (const column of columns) {
             const {name, type, unique} = column;
             if (type === 'id') {
-                obj[name] = (i + 1);
+                obj[name] = `${(i + 1)}`;
                 continue;
             }
             let generatedValue = fakerGenerator[type]();
