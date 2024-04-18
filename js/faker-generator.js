@@ -110,7 +110,7 @@ export const fakerGenerator = {
 };
 
 function getColumnTypeDefinition(type) {
-    return columnsDefinitions.find(c => c.type === type);
+    return columnsDefinitions.find(c => c.value === type);
 }
 
 export function setFakerLocale(lang) {
@@ -125,19 +125,22 @@ export function generateItems(itemsCount, columns) {
         const obj = {};
         for (const column of columns) {
             const {name, type, unique} = column;
+            if (type === 'id') {
+                obj[name] = (i + 1);
+                continue;
+            }
             let generatedValue = fakerGenerator[type]();
 
             if (!typesDefinitions[type]) {
                 typesDefinitions[type] = getColumnTypeDefinition(type);
             }
 
-            if (!unique || !typesDefinitions[type].canBeUnique) {
-                obj[name] = generatedValue;
-            } else {
+            if (unique && typesDefinitions[type].canBeUnique) {
                 while (elements.find(el => el[name] === generatedValue)) {
                     generatedValue = fakerGenerator[type]();
                 }
             }
+            obj[name] = generatedValue;
         }
         elements.push(obj);
     }

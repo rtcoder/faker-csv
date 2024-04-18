@@ -5,6 +5,11 @@
   },
   {
     "canBeUnique": true,
+    "value": "id",
+    "title": "ID"
+  },
+  {
+    "canBeUnique": true,
     "value": "firstName",
     "title": "First name"
   },
